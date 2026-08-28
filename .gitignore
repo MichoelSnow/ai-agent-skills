@@ -1,0 +1,29 @@
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local Python environments
+.venv/
+venv/
+env/
+ENV/
+
+# Python tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local editor and IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local temporary files
+*.tmp
+*.temp
