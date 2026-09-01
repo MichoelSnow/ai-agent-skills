@@ -1,189 +1,264 @@
 ---
 name: curate-notebook
-description: Reorganize and clean an existing Jupyter notebook so its analytical narrative, canonical execution path, findings, and conclusions are understandable and reproducible. Use when a notebook has become messy, out of order, repetitive, stale, difficult to rerun, or hard to understand after exploratory work. Do not use to change analytical conclusions, redesign the analysis, or productionize notebook code unless explicitly requested.
+description: Perform a full editorial and structural refactor of an existing Jupyter notebook so it becomes a clear, maintainable, reader-facing analytical artifact. Use when a notebook is messy, out of order, repetitive, poorly documented, difficult to rerun, or hard to understand after exploratory work. Reorganize cells, remove redundant content, improve formatting, add explanatory narrative, distinguish current analysis from retained experimental history, and preserve analytical meaning. Do not change analytical conclusions, methods, or source data unless separately authorized.
 ---
 
 # Curate Notebook
 
 ## Goal
 
-Turn an exploratory notebook into a durable analytical artifact without changing what the analysis means.
+Transform an exploratory notebook into a durable, understandable analytical artifact.
 
-A curated notebook should let a future reader understand:
+The goal is not to preserve the notebook's original structure. The goal is to preserve the analysis while making the notebook substantially easier to understand, navigate, and rerun.
 
-- what problem the notebook addresses,
-- what data it uses,
-- how the analysis progressed,
-- which path is canonical,
-- what was learned,
-- what was rejected or superseded,
-- what remains unresolved,
-- which cells should be run and in what order.
+A knowledgeable future reader should be able to open the notebook and quickly determine:
 
-Preserve analytical intent. Improve organization, continuity, and reproducibility.
+- what the notebook is for,
+- what data and dependencies it uses,
+- how to run it,
+- which analyses represent the current conclusions,
+- which analyses are retained as exploratory or historical work,
+- what each major section does,
+- what the important findings are,
+- what was superseded or rejected and why,
+- what remains unresolved.
 
-## 1. Read Before Editing
+## 1. Create a Backup Before Modification
 
-Inspect the notebook as a whole before restructuring it.
-
-Infer:
-
-- the notebook's objective,
-- major analytical questions,
-- data sources and setup,
-- important experiments or branches,
-- current/canonical analyses,
-- superseded or abandoned approaches,
-- key findings and conclusions,
-- unresolved questions.
-
-Do not begin by mechanically deleting or reordering cells.
-
-When meaning is ambiguous and the choice could alter the analysis, ask the user rather than guessing.
-
-## 2. Backup Before Modification
-
-Before making any changes to the notebook:
+Before making any changes:
 
 - create a backup copy of the original notebook,
 - use a clearly identifiable backup name,
-- do not overwrite the original backup during the curation process,
-- treat the backup as the reference version for comparing analytical content and restoring anything removed accidentally.
+- do not overwrite that backup during the curation process,
+- treat the backup as the reference version for recovering accidentally removed material.
 
 Do not begin notebook modification until the backup exists.
 
 Keep the backup until:
 
 - the curated notebook has been reviewed,
-- the user is satisfied with the outcome,
-- and the user explicitly approves removing the backup.
+- the user is satisfied with the result,
+- and the user explicitly approves deleting the backup.
 
-Do not delete the backup automatically at the end of the curation workflow.
+Deleting the backup is a separate authorization event.
 
-## 3. Reconstruct the Analytical Narrative
+## 2. Inspect the Notebook as a Whole
 
-Identify the logical story the notebook should tell.
+Before editing, inspect the complete notebook and reconstruct its current state.
 
-Prefer a structure such as:
+Determine:
 
-1. purpose and scope,
-2. setup and data,
-3. data understanding or preparation needed for the analysis,
-4. analytical questions or experiments,
-5. results and interpretation,
-6. conclusions,
-7. unresolved questions or next steps.
-
-This is a default narrative, not a mandatory pipeline. Omit sections that do not serve the notebook.
-
-For substantial analytical blocks, preserve the lightweight pattern:
-
-`question -> experiment -> result -> conclusion/next step`
-
-Do not force every trivial cell into this structure.
-
-## 4. Identify the Canonical Path
-
-Distinguish cells that belong to the current analysis from cells that are:
-
-- scratch work,
-- duplicated,
-- obsolete,
-- superseded,
-- exploratory dead ends,
-- debugging artifacts,
-- temporary inspection,
-- old versions of later code.
-
-The canonical path should be obvious.
-
-When an old experiment explains an important analytical decision, preserve it only if that history adds value. Otherwise remove it or summarize the relevant conclusion in markdown.
-
-Do not keep multiple unexplained versions of the same analysis.
-
-## 5. Reorder Safely
-
-Reorder cells when necessary to create a coherent top-to-bottom execution path.
-
-Before moving a cell, account for:
-
-- variables it depends on,
-- state created by earlier cells,
-- mutations to shared objects,
-- files or queries it produces,
-- randomness,
-- later cells that depend on its outputs.
-
-Do not reorder solely for visual neatness if doing so changes semantics.
-
-Prefer explicit setup over hidden dependence on execution history.
-
-## 6. Add Lightweight Narrative
-
-Use concise markdown cells to explain what a future reader cannot reliably infer from code alone.
-
-Add or improve, when useful:
-
-- notebook purpose and scope,
-- section headings,
-- why an important experiment is being run,
-- interpretation of consequential results,
-- why one approach replaced another,
-- final findings,
-- caveats,
+- the notebook's purpose,
+- major analytical questions,
+- data sources and setup,
+- dependencies and external services,
+- important experiments,
+- current analyses supporting the final conclusions,
+- exploratory experiments and alternative approaches,
+- rejected or superseded branches and why they were abandoned,
+- repeated or redundant work,
+- important outputs and findings,
 - unresolved questions,
-- next logical step.
+- hidden-state or execution-order dependencies.
 
-Do not narrate obvious mechanics or turn the notebook into a report unless requested.
+Do not begin with mechanical cleanup before understanding what the notebook is trying to do.
 
-## 7. Remove Noise
+If the meaning of a cell or branch is materially ambiguous, preserve it and flag the ambiguity rather than guessing.
 
-Remove or consolidate material that obscures the canonical analysis, including:
+## 3. Design the Target Narrative
 
-- empty cells,
+Reorganize the notebook around a clear analytical story.
+
+Use a structure appropriate to the notebook, typically including:
+
+1. notebook header,
+2. setup and dependencies,
+3. data sources and loading,
+4. data preparation,
+5. major analytical sections,
+6. exploratory experiments and alternative approaches where relevant,
+7. current/final analyses,
+8. results and interpretation,
+9. conclusions,
+10. unresolved questions or next steps.
+
+Do not force exploratory work into a single linear story when the analytical process legitimately branched.
+
+Preserve useful experimental history, but clearly distinguish it from the analyses that support the current conclusions.
+
+This is a default structure, not a mandatory template. Omit sections that do not serve the notebook.
+
+Prefer the narrative pattern:
+
+`question -> analysis/experiment -> result -> interpretation -> next decision`
+
+Do not preserve exploratory chronology when it makes the final notebook harder to understand.
+
+## 4. Add a Comprehensive Notebook Header
+
+At the top of the notebook, create or improve a substantial markdown header that explains:
+
+- notebook title,
+- purpose,
+- scope,
+- primary analytical questions,
+- data sources,
+- required external services or databases,
+- important dependencies,
+- setup assumptions,
+- how to run the notebook,
+- expected execution order,
+- important runtime or cost considerations,
+- outputs or artifacts produced,
+- major findings,
+- known caveats,
+- unresolved questions,
+- current status of the analysis.
+
+The header should help a future user understand the notebook before reading the code.
+
+Do not turn the header into a full project document. Keep it specific to the notebook.
+
+## 5. Distinguish Current Analysis from Experimental History
+
+Identify which analyses represent the current state of the work and which are retained as part of the analytical history.
+
+Classify meaningful analytical branches as appropriate:
+
+- **Current** — contributes to the present conclusions or final analytical approach.
+- **Exploratory** — investigates a question or alternative without necessarily producing the final approach.
+- **Rejected** — tested and intentionally abandoned because the evidence did not support it.
+- **Superseded** — once useful but replaced by a later approach.
+
+Make these distinctions obvious through notebook structure and markdown.
+
+For retained historical experiments, record enough context to explain:
+
+- what question was being tested,
+- what approach was tried,
+- what was observed,
+- why the approach was rejected, superseded, or not pursued further.
+
+Do not erase useful failed experiments merely because they are not part of the final solution. Negative results and abandoned approaches can be important analytical evidence.
+
+At the same time, a reader interested only in the current conclusions should be able to identify and follow the current analysis without reconstructing the entire exploratory history.
+
+The goal is not one execution path. The goal is a notebook whose analytical status is explicit.
+
+## 6. Reorder Cells Aggressively When Needed
+
+Move cells into a logical analytical structure when the current ordering primarily reflects accidental interactive editing.
+
+Preserve meaningful experimental progression when chronology helps explain how an analytical decision was reached. Reorganization should clarify the analysis, not rewrite its history into an artificially linear process.
+
+Before moving cells, account for:
+
+- variable dependencies,
+- object mutation,
+- files written or read,
+- data loaded,
+- random state,
+- model state,
+- downstream assumptions.
+
+Prefer explicit dependencies over hidden state.
+
+Do not preserve confusing order merely because that is how the notebook evolved.
+
+## 7. Remove Redundant and Obsolete Cells
+
+Remove or consolidate cells that provide neither current analytical value nor useful historical context, including:
+
 - exact duplicates,
-- abandoned scratch cells with no enduring value,
-- debug prints or temporary inspections,
-- stale commentary contradicted by later work,
-- repeated imports or setup,
+- repeated setup,
+- abandoned approaches that provide no useful evidence or decision history,
+- old versions of later code that do not explain an important analytical decision,
+- temporary debugging,
+- unused intermediate calculations,
+- obsolete plots,
+- stale inspection cells,
 - redundant outputs.
 
-Be conservative when deletion could remove analytical evidence or intent.
+Preserve exploratory, rejected, or superseded experiments when they document useful evidence, explain why an analytical direction changed, prevent future repetition of an unproductive approach, or otherwise contribute to the analytical record.
 
-If uncertain whether a cell is obsolete, preserve it and flag the ambiguity rather than silently deleting it.
+When retaining them, clearly label their status and summarize the outcome.
 
-## 8. Reconcile Code, Markdown, and Outputs
+Remove redundant experimentation, not useful analytical history.
+
+If removing a cell could alter the analytical meaning or erase valuable evidence, keep it or summarize it explicitly.
+
+## 8. Format and Lint Code Cells
+
+Improve code quality inside the notebook without changing analytical semantics.
+
+When appropriate:
+
+- normalize formatting,
+- fix indentation,
+- remove unused imports,
+- consolidate duplicate imports,
+- clean obvious dead code,
+- improve variable naming where the meaning is clear,
+- break overly dense cells into logical units,
+- combine tiny fragmented cells when doing so improves readability.
+
+For exploratory or historical cells, the surrounding documentation should also make their status clear. A future reader should not have to infer whether a cell represents the current approach or an abandoned experiment.
+
+Use the project's established formatter/linter conventions when available.
+
+Do not refactor analytical logic merely for stylistic preference.
+
+## 9. Document Every Substantive Code Cell
+
+Every substantive code cell should make its purpose clear to a future reader.
+
+Prefer a short markdown heading or explanatory markdown immediately before the cell.
+
+Use inline comments inside code for non-obvious implementation details.
+
+Do not add repetitive comments that simply restate obvious code.
+
+The reader should be able to answer:
+
+- why this cell exists,
+- what it consumes,
+- what it produces,
+- how it contributes to the current analysis.
+
+For experimental sections, document the outcome as well as the purpose. When an approach was rejected or superseded, explain why.
+
+For sections representing the current analysis, make that status clear enough that a reader seeking only the final analytical path can identify them quickly.
+
+## 10. Document Every Major Section
+
+Each major section should begin with concise markdown explaining:
+
+- what question or task the section addresses,
+- why it is being performed,
+- what result or decision the reader should expect.
+
+After important analytical sections, add concise interpretation describing:
+
+- the key result,
+- what it means,
+- whether it changes the next step.
+
+Do not leave major blocks of analysis separated only by code.
+
+## 11. Reconcile Markdown, Code, and Outputs
 
 After restructuring:
 
-- make markdown match the current code,
-- make conclusions match the current results,
-- remove references to deleted or superseded steps,
-- identify stale outputs created by older code,
-- ensure section headings match the actual analysis.
+- update markdown that describes old behavior,
+- remove stale conclusions,
+- ensure section headings match the actual analysis,
+- clear or regenerate stale outputs when appropriate,
+- remove references to deleted cells,
+- make sure findings correspond to the current canonical code.
 
-Do not preserve output merely because it exists.
+Do not preserve output simply because it exists.
 
-If code changed materially, stale output should be cleared or regenerated when execution is authorized and practical.
-
-## 9. Improve Reproducibility Without Productionizing
-
-Prefer a clean canonical execution path from top to bottom.
-
-Where material:
-
-- centralize imports and basic setup,
-- make important parameters visible,
-- preserve random seeds,
-- avoid hidden state,
-- make data-loading assumptions understandable,
-- avoid relying on variables created only by an accidental earlier execution order.
-
-Do not introduce frameworks, orchestration, package structure, configuration systems, or production abstractions merely to clean the notebook.
-
-Reusable helpers may be extracted within the notebook when they materially improve readability. Moving logic into application modules is a separate task unless explicitly requested.
-
-## 10. Preserve Analytical Meaning
+## 12. Preserve Analytical Meaning
 
 Curation must not silently change:
 
@@ -191,68 +266,152 @@ Curation must not silently change:
 - filters,
 - cohorts,
 - statistical methods,
-- model choices,
 - feature definitions,
+- model choices,
 - evaluation metrics,
-- business/domain assumptions,
+- data-source semantics,
+- domain assumptions,
 - analytical conclusions.
 
-If a substantive analytical problem is discovered, flag it separately.
+If a substantive analytical error is discovered, flag it separately.
 
-Do not "fix" analytical logic as part of notebook curation unless the user explicitly authorizes that work.
+Do not fix analytical logic unless the user separately authorizes analysis or implementation changes.
 
-## 11. Verify the Curated Notebook
+## 13. Improve Reproducibility Without Productionizing
 
-When execution is available and authorized, prefer restarting the kernel and running the canonical notebook top-to-bottom.
+Make the canonical notebook as reproducible as practical.
 
-Check that:
+When useful:
 
-- cells execute in intended order,
-- required state is created explicitly,
-- outputs correspond to current code,
-- major results remain consistent with the original analysis,
-- the notebook reaches its stated conclusions without relying on hidden execution history.
+- centralize imports and setup,
+- expose important parameters,
+- preserve random seeds,
+- make data-loading assumptions explicit,
+- avoid accidental dependency on prior interactive execution,
+- keep the intended run order clear.
 
-If full execution is expensive, unsafe, or unavailable, perform the strongest proportionate validation possible and state what was not verified.
+Do not introduce orchestration frameworks, package architecture, deployment systems, or production abstractions merely to improve notebook organization.
 
-Do not claim the notebook is reproducible unless that was actually checked.
+Productionization is a separate task.
 
-## 12. Completion Check
+## 14. Use a Bounded Verification Strategy
 
-Before considering curation complete, confirm that a future reader can quickly determine:
+Do not assume every cell should be executed during curation.
+
+Use a total default execution budget of approximately 5 minutes for the curation session.
+
+Before running cells, consider whether they may be:
+
+- long-running,
+- data-intensive,
+- externally dependent,
+- costly,
+- destructive,
+- dependent on unavailable services.
+
+Use this verification order:
+
+### Static Validation
+
+Always perform the strongest practical static review first:
+
+- notebook structure,
+- cell ordering,
+- variable dependencies,
+- obvious undefined references,
+- setup placement,
+- stale-output indicators,
+- hidden execution-state assumptions.
+
+### Targeted Execution
+
+Run fast, high-value cells or representative sections when doing so materially increases confidence.
+
+Use the total execution budget deliberately.
+
+Do not spend most of the budget on a single cell unless it is essential to validation.
+
+### Full Execution
+
+Run the notebook top-to-bottom only when:
+
+- required dependencies and services are available,
+- expected runtime is reasonable,
+- execution fits the available budget or the user has approved a longer run,
+- there are no destructive or externally consequential steps.
+
+If meaningful execution would exceed the default budget, stop and ask before continuing.
+
+Never launch operations expected to take tens of minutes or hours solely for notebook curation without explicit approval.
+
+## 15. Report What Was and Was Not Verified
+
+At completion, distinguish:
+
+- what was structurally validated,
+- what was actually executed,
+- what was not executed,
+- why execution was skipped,
+- any remaining reproducibility risks.
+
+A valid outcome may be:
+
+- static validation only,
+- static plus targeted execution,
+- full top-to-bottom execution.
+
+Do not claim the notebook was fully executed or reproducible when it was not.
+
+## 16. Completion Standard
+
+Before considering curation complete, confirm that a future reader can determine:
 
 - **Purpose:** Why does this notebook exist?
-- **Data:** What is being analyzed?
-- **Flow:** What is the canonical execution path?
-- **Reasoning:** Why were important analytical steps taken?
+- **Data:** What sources and services does it depend on?
+- **Setup:** What must be available before running it?
+- **Execution:** What must be run, and in what order, for the analyses the reader wants to reproduce?
+- **Current analysis:** Which analyses support the present conclusions?
+- **Experimental history:** Which sections are exploratory, rejected, or superseded?
+- **Decisions:** Why were important alternative approaches abandoned or replaced?
+- **Sections:** What does each major section do?
+- **Cells:** What does each substantive code cell contribute?
 - **Findings:** What did the analysis show?
-- **Status:** Which paths are current versus superseded?
+- **Status:** Is the status of each important analytical branch clear?
+- **Outputs:** What does the notebook produce?
 - **Open questions:** What remains unresolved?
-- **Execution:** Can the intended cells be run in a coherent order?
+- **Verification:** What parts of the notebook were actually validated?
 - **Backup:** Has the original notebook backup been retained pending user approval?
 
-If any of these remain unclear, improve only the missing part rather than adding documentation everywhere.
+The final notebook should feel deliberately authored, not merely cleaned.
 
 ## Authorization Boundary
 
-Curation authorizes structural and explanatory notebook edits only when the user's request explicitly asks for notebook modification.
+Curation authorizes structural, formatting, explanatory, and organizational edits to the notebook only when the user's request explicitly asks for modification.
 
 It does not authorize:
 
 - changing analytical logic,
 - fixing newly discovered analytical defects,
-- productionizing the notebook,
-- modifying source application code,
+- expanding the analysis,
+- productionizing notebook code,
 - destructive changes to source data,
-- expanding the analysis into new questions or models.
+- modifying application code,
+- deleting the original backup.
 
-Deleting the backup requires explicit user approval and is not implied by approval of the curated notebook itself.
-
-When a discovered issue crosses from curation into analysis or implementation, report it and stop at that boundary.
+When a discovered issue crosses from curation into analysis, debugging, or implementation, report it and stop at that boundary.
 
 ## Key Principle
 
-Preserve the analysis, remove the archaeology. The final notebook should expose one understandable analytical story and one clear canonical path.
+Preserve the analysis and organize the archaeology. Turn the notebook into a clear, reader-facing analytical record where current conclusions are easy to follow and useful exploratory history remains understandable.
+
+## Supporting Files
+
+Use supporting resources when present:
+
+- `references/curation_standard.md` for the detailed target quality standard,
+- `scripts/notebook_tools.py` for deterministic notebook inspection and structural edits.
+
+Do not read or use supporting files unnecessarily. Use them when they materially improve reliability or reduce direct manipulation of raw notebook JSON.
 
 ## Attribution
 
@@ -260,11 +419,12 @@ This skill was adapted from concepts and workflow patterns in:
 
 - `jupyter-notebook-assistant` from `Dexploarer/claudius-skills`: https://github.com/Dexploarer/claudius-skills
 - `jupyter-notebook` from OpenAI's `openai/skills`: https://github.com/openai/skills/tree/main/skills/.curated/jupyter-notebook
+- `jupyter-notebooks` from OpenAI's `role-specific-plugins`: https://github.com/openai/role-specific-plugins/tree/main/plugins/data-analytics/skills/jupyter-notebooks
 - `notebook-for-experiment` from JetBrains `intellij-community`: https://github.com/JetBrains/intellij-community/tree/master/.agents/skills/notebook-for-experiment
 - `lab-notes` from `eins78/agent-skills`: https://github.com/eins78/agent-skills/tree/main/skills/lab-notes
+- notebook editing patterns from `narang99/jupyter-notebook-editor-skill`: https://github.com/narang99/jupyter-notebook-editor-skill
+- Jupyter notebook style guidance from STScI: https://github.com/spacetelescope/style-guides/blob/master/guides/jupyter-notebooks.md
 
-The OpenAI skill is distributed under the license terms of the upstream `openai/skills` repository. JetBrains IntelliJ Community source is governed by Apache 2.0 licensing terms for applicable open-source code. `eins78/agent-skills` is distributed under the MIT License. See each upstream repository for complete license texts and notices.
+See each upstream source for its complete license terms and notices before redistributing copied or derivative material.
 
-No license assertion is made here for `Dexploarer/claudius-skills`; verify and preserve its upstream license terms before distributing copied or derivative material beyond conceptual adaptation.
-
-This version has been substantially modified to focus on reconstructing analytical narrative, distinguishing canonical from superseded notebook state, preserving analytical meaning, and supporting lightweight reproducibility without forcing production architecture.
+This version has been substantially modified to support aggressive notebook editorial restructuring, deterministic backup and structural handling, explicit cell/section documentation, comprehensive notebook headers, proportional verification with a bounded execution budget, and preservation of analytical meaning without requiring full execution or productionization.
