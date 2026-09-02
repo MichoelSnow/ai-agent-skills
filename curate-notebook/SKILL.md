@@ -94,6 +94,8 @@ Prefer the narrative pattern:
 
 Do not preserve exploratory chronology when it makes the final notebook harder to understand.
 
+Write for an outside data scientist who understands the analytical concepts but does not know the project. Explain project-specific data sources, variables, decisions, and results; do not spend space re-explaining standard statistical or machine-learning concepts.
+
 ## 4. Add a Comprehensive Notebook Header
 
 At the top of the notebook, create or improve a substantial markdown header that explains:
@@ -187,6 +189,8 @@ Remove redundant experimentation, not useful analytical history.
 
 If removing a cell could alter the analytical meaning or erase valuable evidence, keep it or summarize it explicitly.
 
+Apply the same test to documentation. Remove explanatory cells that merely repeat a nearby heading, cell comment, or result. Prefer one precise explanation in the most useful location over several generic reminders.
+
 ## 8. Format and Lint Code Cells
 
 Improve code quality inside the notebook without changing analytical semantics.
@@ -208,15 +212,17 @@ Use the project's established formatter/linter conventions when available.
 
 Do not refactor analytical logic merely for stylistic preference.
 
-## 9. Document Every Substantive Code Cell
+When a group contains several cells that repeat the same analytical procedure with different feature sets, targets, filters, or parameter values, consider extracting the shared procedure into a small, local helper function. Use this only when the shared logic is genuinely clear and the helper makes the analysis easier to follow. Keep separate, clearly labeled call cells for each meaningful model or parameter variation so the comparison remains visible. Do not hide the experimental design inside an opaque generalized framework, and do not make this refactor when it risks changing semantics or cannot be statically checked with reasonable confidence.
 
-Every substantive code cell should make its purpose clear to a future reader.
+## 9. Document Code Cells Selectively
 
-Prefer a short markdown heading or explanatory markdown immediately before the cell.
+Every substantive code cell should make its purpose clear to a future reader. Trivial cells may omit a separate explanation when their purpose is obvious from the surrounding section and code.
+
+For substantive cells, prefer a short, cell-specific comment at the beginning of the code cell or concise markdown immediately before it. The explanation should identify the operation, its meaningful inputs, and its output or analytical role.
 
 Use inline comments inside code for non-obvious implementation details.
 
-Do not add repetitive comments that simply restate obvious code.
+Do not mechanically prepend the same `Purpose:` label or generic prose to every cell. Do not add comments that merely translate obvious code into English, and do not retain stale labels such as `Cell 2:` after cells have been moved or removed.
 
 The reader should be able to answer:
 
@@ -225,7 +231,7 @@ The reader should be able to answer:
 - what it produces,
 - how it contributes to the current analysis.
 
-For experimental sections, document the outcome as well as the purpose. When an approach was rejected or superseded, explain why.
+For experimental sections, document the outcome as well as the purpose. When an approach was rejected or superseded, explain why. For repeated experiments, state at the top of each variation what differs from the other cells in the group.
 
 For sections representing the current analysis, make that status clear enough that a reader seeking only the final analytical path can identify them quickly.
 
@@ -244,6 +250,8 @@ After important analytical sections, add concise interpretation describing:
 - whether it changes the next step.
 
 Do not leave major blocks of analysis separated only by code.
+
+At the end of every section that produces an analytical output, add a concise markdown result summary in the most natural location. Base it on the notebook's existing outputs and conclusions unless execution has been explicitly authorized and is practical. State the observation, interpretation, and resulting decision or next step. Include exploratory and model-comparison sections; omit setup-only sections that produce no analytical result. Avoid adding a summary when an existing, sufficiently specific conclusion already serves that purpose—improve or relocate the existing text instead.
 
 ## 11. Reconcile Markdown, Code, and Outputs
 

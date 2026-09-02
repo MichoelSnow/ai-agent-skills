@@ -23,6 +23,8 @@ That reader should be able to determine:
 
 The reader should not need to reconstruct the author's interactive editing history.
 
+Assume the reader is a data scientist who understands standard analytical methods but does not know this project's data model, terminology, provenance, or prior decisions. Focus explanations on project-specific context and analytical choices rather than introductory explanations of familiar concepts.
+
 ## 2. Notebook Header
 
 Begin with a substantial markdown header appropriate to the notebook.
@@ -145,6 +147,8 @@ Each major section should briefly explain:
 
 Avoid long stretches of code without narrative structure.
 
+Documentation should be information-dense. Remove or merge explanations that repeat a heading, an adjacent comment, or an existing conclusion. A shorter notebook with precise context is preferable to one filled with mechanically generated prose.
+
 ## 4. Analytical Status
 
 Make the status of meaningful analytical branches explicit.
@@ -253,7 +257,15 @@ Do not change analytical semantics merely to satisfy style preferences.
 
 Do not introduce abstractions unless they improve the notebook's actual readability or correctness.
 
-## 9. Imports and Setup
+When multiple experiment cells repeat a clear procedure with only feature, target, filter, or parameter changes, a small local helper function is encouraged. Keep one explicit, clearly labeled call cell per meaningful variation so the experimental comparison remains inspectable. Do not force unrelated branches into one helper or introduce a generalized framework that obscures the analytical design.
+
+## 9. Cell Documentation
+
+Document substantive code cells selectively. A short comment at the beginning of the code cell is appropriate when it makes the cell's purpose, inputs, outputs, or role in the analysis clearer. Nearby markdown is also appropriate for a logical group of cells.
+
+Do not add identical boilerplate to every cell, explain trivial statements unnecessarily, or leave stale labels such as `Cell 3:` after reorganization. For repeated experiments, identify the specific variation at the top of each call cell.
+
+## 10. Imports and Setup
 
 Keep common setup easy to locate.
 
@@ -268,7 +280,7 @@ Avoid repeatedly importing the same packages throughout the notebook unless loca
 
 Do not hide important analytical parameters inside distant cells.
 
-## 10. Data Loading and Mutation
+## 11. Data Loading and Mutation
 
 Make data provenance understandable.
 
@@ -290,9 +302,11 @@ Clearly identify cells that:
 
 Curation does not authorize destructive execution.
 
-## 11. Results and Interpretation
+## 12. Results and Interpretation
 
 Important analytical output should be followed by interpretation when the implication is not self-evident.
+
+For each section that produces analytical output, add or improve a concise markdown summary at the end of the section. It should state the observed result, what it means, and whether it changes the next step. Use existing outputs and conclusions by default; do not rerun expensive or externally dependent analysis merely to write the summary. Setup-only sections do not need result summaries.
 
 Separate:
 
@@ -304,7 +318,7 @@ Do not let important conclusions exist only implicitly in output tables or chart
 
 For experiments, record negative results and decisions when they affected the direction of the work.
 
-## 12. Outputs
+## 13. Outputs
 
 Keep outputs useful and bounded.
 
@@ -322,7 +336,7 @@ If correspondence cannot be established, label or clear them rather than present
 
 Avoid dumping large raw datasets when a representative sample or summary communicates the result.
 
-## 13. Execution Order and Hidden State
+## 14. Execution Order and Hidden State
 
 Interactive notebooks often contain hidden state. Reduce it where practical.
 
@@ -341,7 +355,7 @@ Do not manufacture a single linear execution path when the notebook intentionall
 
 Instead, make execution requirements explicit for each relevant analytical path.
 
-## 14. Reproducibility
+## 15. Reproducibility
 
 Aim for the strongest practical reproducibility without turning the notebook into production software.
 
@@ -358,7 +372,7 @@ Full top-to-bottom execution is not mandatory for curation.
 
 External databases, services, long-running computation, large datasets, or expensive operations may legitimately prevent it.
 
-## 15. Verification Budget
+## 16. Verification Budget
 
 Use approximately five minutes as the default **total execution budget for the curation session**, not per cell.
 
@@ -377,7 +391,7 @@ If meaningful verification is expected to exceed the budget, ask the user before
 
 Never launch operations expected to take tens of minutes or hours merely to prove that the notebook can run.
 
-## 16. External Dependencies
+## 17. External Dependencies
 
 Do not treat unavailable external dependencies as curation failures.
 
@@ -400,7 +414,7 @@ When execution is blocked:
 
 Do not claim execution success where none occurred.
 
-## 17. Backup Standard
+## 18. Backup Standard
 
 Create a backup before modifying the source notebook.
 
@@ -415,7 +429,7 @@ Do not delete the backup when curation finishes.
 
 Delete it only after the user has reviewed the curated notebook, is satisfied with the result, and explicitly authorizes backup removal.
 
-## 18. Final Editorial Pass
+## 19. Final Editorial Pass
 
 Before completion, read the notebook as a document rather than merely inspecting individual cells.
 
@@ -435,7 +449,7 @@ Check for:
 
 The final notebook should feel deliberately authored.
 
-## 19. Completion Checklist
+## 20. Completion Checklist
 
 A curation pass is complete when, to the strongest practical extent:
 
@@ -445,7 +459,8 @@ A curation pass is complete when, to the strongest practical extent:
 - [ ] Data sources and external dependencies are documented.
 - [ ] Setup and execution instructions are clear.
 - [ ] Major sections have explanatory narrative.
-- [ ] Substantive code cells or logical cell groups have clear purpose.
+- [ ] Substantive code cells or logical cell groups have selective, specific purpose documentation.
+- [ ] Repeated experiment groups use clear helper functions where that improves readability, with explicit variation call cells retained.
 - [ ] Current analyses are easy to identify.
 - [ ] Exploratory, rejected, and superseded work is clearly distinguished.
 - [ ] Useful negative results and analytical decisions are preserved.
@@ -453,6 +468,7 @@ A curation pass is complete when, to the strongest practical extent:
 - [ ] Code formatting is consistent.
 - [ ] Stale or misleading outputs have been addressed.
 - [ ] Important results have interpretation.
+- [ ] Every analytical-output section has a concise result summary, unless an existing conclusion already serves that purpose.
 - [ ] Current conclusions are summarized.
 - [ ] Open questions and caveats are visible.
 - [ ] Execution dependencies are understandable.
