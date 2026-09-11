@@ -189,6 +189,8 @@ For important model comparisons, record the candidate, key configuration differe
 
 Exploratory work should be rerunnable enough to support its conclusions, but it does not need production architecture.
 
+When a database extract or intermediate computation is expensive enough that caching materially improves rerun time, save the result in the project's established cache location and load it by default on later runs. Use an explicit refresh control to rebuild the cache. Do not cache every dataframe: quick transformations should remain in memory, and caches should be reserved for database extracts, expensive computations, or substantial final analysis outputs. Follow the project's established serialization format first; when no project convention exists, pickle is a reasonable default for local pandas notebook data, but use a more portable or durable format when interoperability, archival stability, or security requires it. Never load pickle files from untrusted sources.
+
 When results become important:
 
 - make key assumptions explicit,
