@@ -63,7 +63,8 @@ For notebooks:
 - keep cells focused on one purpose,
 - keep outputs bounded and readable,
 - inspect the output before deciding the next analytical step,
-- preserve a sensible top-to-bottom execution path where practical.
+- preserve a sensible top-to-bottom execution path where practical,
+- put each section or subsection heading in its own Markdown cell; place explanatory prose in the Markdown cell or cells immediately below it so collapsing the section hides the explanation as well.
 
 For SQL or scripts, use the same principle: produce an interpretable intermediate result before layering on additional transformations.
 

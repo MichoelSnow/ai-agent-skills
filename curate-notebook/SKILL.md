@@ -92,6 +92,8 @@ Prefer the narrative pattern:
 
 `question -> analysis/experiment -> result -> interpretation -> next decision`
 
+Keep navigation headings separate from their explanations: each section or subsection heading should be the only content in its heading Markdown cell. Put the explanatory prose in the following Markdown cell or cells so notebook section collapsing hides that prose with the section contents.
+
 Do not preserve exploratory chronology when it makes the final notebook harder to understand.
 
 Write for an outside data scientist who understands the analytical concepts but does not know the project. Explain project-specific data sources, variables, decisions, and results; do not spend space re-explaining standard statistical or machine-learning concepts.
