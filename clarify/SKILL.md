@@ -113,18 +113,11 @@ Reply with: defaults (or 1a 2a)
 
 ## Authorization Boundary
 
-Clarification is not authorization to implement.
-
-While this skill is active:
-
-- do not edit files,
-- do not execute mutating commands,
-- do not make external or destructive changes,
-- do not treat discussion, diagnosis, planning, review, or acknowledgement as permission to act.
+Follow the repository's `AGENTS.md` authority model for universal authorization and scope boundaries. Clarification is not authorization to implement; while this skill is active, perform only the low-risk read-only investigation needed to resolve the uncertainty.
 
 Low-risk read-only investigation needed to clarify the request is allowed.
 
-Once the request is sufficiently clarified, stop this workflow. Do not automatically transition into implementation unless the user's current instruction independently and explicitly authorizes implementation.
+Once the request is sufficiently clarified, stop this workflow. Do not transition into implementation unless the current user instruction independently and explicitly authorizes it.
 
 ## Key Principle
 

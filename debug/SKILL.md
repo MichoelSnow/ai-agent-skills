@@ -9,7 +9,7 @@ description: Evidence-first debugging for bugs, failures, regressions, unexpecte
 
 Find the cause of a problem with the smallest useful investigation, then fix only after the evidence supports a cause.
 
-ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
+Establish sufficient cause before attempting a fix. A symptom-only fix is not enough when the evidence does not support the underlying cause.
 
 Avoid speculative fixes, generic troubleshooting dumps, and broad investigation that is disproportionate to the problem.
 
@@ -154,7 +154,7 @@ When authorization is unclear, stop at diagnosis.
 
 ## Key Principle
 
-Evidence before theory. Root cause before repair. Narrow checks before broad ones. Stop when the current model stops explaining the evidence.
+Evidence before theory. Sufficient cause before repair. Narrow checks before broad ones. Stop when the current model stops explaining the evidence.
 
 ## Attribution
 

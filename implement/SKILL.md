@@ -13,17 +13,7 @@ Prefer existing project decisions over generic best practices, complete solution
 
 ## 1. Confirm Authorization and Scope
 
-Implementation requires an instruction that independently authorizes modification.
-
-Do not treat any of the following as authorization to implement:
-
-- discussion,
-- clarification,
-- diagnosis,
-- review,
-- planning,
-- approval of a plan to exist,
-- acknowledgement of a problem.
+Follow the repository's `AGENTS.md` authority model for universal authorization and scope boundaries. Implementation requires the current user request to independently authorize modification; a discussion, clarification, diagnosis, review, plan, or acknowledgement of a problem is not implementation authorization.
 
 Before changing state, identify the requested outcome and the boundaries of the work.
 
@@ -265,13 +255,11 @@ If useful follow-up work is discovered, mention it briefly rather than performin
 
 ## Authorization Boundary
 
-This skill permits mutation only because the user's current request explicitly authorizes implementation.
-
-Authorization remains bounded by the requested scope.
+This skill permits code or configuration mutation only when the current user request explicitly authorizes implementation within the requested scope. Follow `AGENTS.md` for universal authorization, preservation, and stopping boundaries.
 
 Consequential actions such as destructive migrations, deployment, overwriting user work, deleting data, committing, merging, or pushing require their own authorization when they are not clearly part of the user's request.
 
-When scope or authorization is ambiguous, prefer not to mutate.
+When scope or authorization is ambiguous, prefer not to mutate and clarify the decision-relevant uncertainty.
 
 ## Key Principle
 
