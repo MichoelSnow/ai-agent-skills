@@ -145,6 +145,32 @@ If work truly cannot be represented as one linear sequence:
 
 Prefer a simple sequential path unless parallel work is genuinely necessary.
 
+### PR and deployment topology
+
+Default every plan to exactly one PR.
+
+The one-PR default includes implementation, documentation, configuration instructions, deployment preparation, and release verification.
+
+Use multiple PRs only when one PR would cause a concrete technical, dependency, ordering, data-integrity, security, or production failure.
+
+The following are not sufficient reasons to split PRs:
+
+- cleaner review separation;
+- preferred organizational process;
+- deployment being conceptually different from implementation;
+- personal preference;
+- “best practice” without a concrete failure;
+- easier rollback without a demonstrated single-PR rollback problem.
+
+If multiple PRs are proposed, the plan must explicitly identify:
+
+1. the exact failure that would occur with one PR;
+2. why sequencing within one PR cannot prevent that failure;
+3. the exact number and purpose of each additional PR; and
+4. the user’s explicit approval of the exception.
+
+If that justification is not present, use one PR.
+
 ## 5. Make Each Task Unambiguous
 
 Each task should be small enough that a competent human or another AI agent can execute it without reinterpreting the intended work.
@@ -338,6 +364,9 @@ Check that:
 - non-goals are clear;
 - release or deployment steps do not appear before implementation is actually ready;
 - nothing outside the requested scope was added merely because it might be useful.
+- the plan uses one PR unless a documented hard technical failure requires more;
+- any multi-PR exception includes the required failure analysis and explicit approval;
+- external deployment triggers and hosting behavior are included in release ordering;
 
 If the plan fails this review, revise it before presenting it.
 
@@ -376,6 +405,10 @@ In particular, approval of a plan does not itself authorize:
 
 When an approved plan exists, follow it exactly enough that execution remains faithful to the agreed sequence and scope.
 
+Current user instructions supersede earlier plan decisions. If the user changes the PR count, deployment topology, release order, or other material decision, treat the change as an approved amendment. Update the plan before continuing. 
+
+Do not preserve an earlier “fixed decision” when the user has explicitly changed it.
+
 Proceed from top to bottom.
 
 Do not independently:
@@ -401,6 +434,8 @@ Do not treat the high-level outcome as permission to ignore unfinished plan item
 ## 15. Amendment Protocol
 
 An approved plan may become wrong, incomplete, or blocked as implementation reveals new facts.
+
+A user-requested change to PR count or deployment topology is not a reason to defend the existing structure. Apply the user's new decision unless a concrete failure would result. If a concrete failure would result, explain it and ask for approval before retaining the exception.
 
 Do not improvise around the plan.
 
