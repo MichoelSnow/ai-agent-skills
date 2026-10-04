@@ -102,13 +102,24 @@ For changes spanning multiple related pieces:
 
 For substantial features, migrations, architectural changes, or difficult-to-reverse work:
 
-- work from an approved scope or plan when one exists,
-- divide execution into bounded units,
-- preserve acceptance criteria,
-- use checkpoints where they reduce risk,
-- stop before consequential deviations from the agreed approach.
+- work from an approved plan when one exists;
+- follow the approved plan in order;
+- satisfy each phase's completion conditions before proceeding;
+- update task checkboxes only when the described work is actually complete;
+- stop when repository reality materially conflicts with the plan.
 
-A plan is an outcome contract, not a transcript. Adapt implementation mechanics to repository reality when necessary, but do not silently change scope, requirements, or acceptance criteria.
+An approved plan is the authoritative execution contract for the work it covers.
+
+Do not silently:
+
+- reorder phases or tasks;
+- skip incomplete work;
+- substitute a different implementation approach;
+- add material scope;
+- weaken completion conditions;
+- reinterpret an agreed decision.
+
+If the plan cannot be followed as written, stop and propose the smallest necessary amendment. Identify the reason and the affected downstream steps. Do not modify the plan or continue with the conflicting implementation until the user explicitly approves the amendment.
 
 ## 5. Make the Smallest Complete Change
 
@@ -190,6 +201,8 @@ If the remaining uncertainty could materially change the solution, ask rather th
 
 Do not stack speculative changes to push through a blocker.
 
+When an approved plan exists, a material surprise that conflicts with the plan triggers the plan amendment process. Do not resolve the conflict by silently changing execution.
+
 ## 9. Keep the Codebase Clean
 
 When the requested change supersedes code within its authorized scope:
@@ -240,18 +253,31 @@ Do not claim success without evidence.
 
 ## 12. Finish at the Requested Boundary
 
-Once the requested outcome is implemented and proportionately verified, stop.
+Once the authorized work is complete, stop.
+
+When no approved plan governs the work, completion means the requested outcome has been implemented and proportionately verified.
+
+When an approved plan governs the work, completion means:
+
+- every in-scope plan task has been completed or explicitly removed through an approved amendment;
+- every required phase completion condition has been satisfied;
+- required verification for the completed work has been performed when separately authorized;
+- no unresolved plan conflict or approved-but-unimplemented amendment remains.
+
+Do not declare the work complete merely because the implementation appears to satisfy the high-level outcome if required plan steps or completion conditions remain unfinished.
 
 Do not automatically:
 
-- begin the next roadmap item,
-- implement follow-up ideas,
-- productionize adjacent exploratory work,
-- refactor neighboring systems,
-- deploy or migrate environments,
+- begin the next roadmap item;
+- implement follow-up ideas;
+- productionize adjacent exploratory work;
+- refactor neighboring systems;
+- deploy or migrate environments;
 - commit, merge, or push unless authorized.
 
-If useful follow-up work is discovered, mention it briefly rather than performing it.
+If useful follow-up work is discovered but is outside the approved plan or requested scope, mention it briefly rather than performing it.
+
+If completing the requested outcome would require work not present in an approved plan, stop and use the plan amendment process rather than adding that work silently.
 
 ## Authorization Boundary
 
