@@ -74,11 +74,15 @@ Prefer one coherent analytical step at a time.
 
 For notebooks:
 
-- keep cells focused on one purpose;
+- keep each substantive cell focused on one coherent analytical purpose and one primary intermediate result or output;
+- separate setup and helper definitions, data loading, transformations, model calculations, and presentation when they are distinct analytical phases;
 - keep outputs bounded and readable;
 - inspect the output before deciding the next analytical step;
-- preserve a sensible top-to-bottom path where practical;
+- default to a single top-to-bottom execution path for the active notebook;
 - keep section and subsection headings in their own Markdown cells so notebook collapsing remains useful.
+- If a later section needs additional data, update the earlier loading cell rather than adding a later reload. Keep expensive source extraction, transformation, modeling, and presentation in separate cells.
+
+A cell whose purpose requires multiple major “and” clauses should normally be split before continuing. Prefer splitting by analytical phase rather than by arbitrary line count.
 
 For SQL or scripts, use the same principle: produce an interpretable intermediate result before layering on additional transformations.
 
@@ -138,6 +142,18 @@ Use simple structural indicators as warning signals, including:
 - unusually large individual cells,
 - repeated abstractions or utilities,
 - growing amounts of configuration or control flow.
+
+Use these practical thresholds as warning signals, not hard limits:
+
+- more than 75 physical lines or 50 executable lines;
+- three or more distinct analytical phases;
+- more than one distinct expensive operation, such as a database query, large join, model fit, or file export;
+- more than two major intermediate DataFrames;
+- substantial calculation and presentation logic in the same cell.
+
+If a cell triggers at least two of these conditions, review it for splitting before adding more code. Split by analytical responsibility when the cell combines data preparation, model calculation, prediction generation, or presentation.
+
+A lightweight notebook complexity report may use `nbformat` and Python AST inspection to report per-cell line counts, top-level statements, AST nodes, queries, displays, file operations, and major assignments. Use Radon for Halstead and cyclomatic metrics when useful. Treat all metrics as warning signals; sequential readability and analytical responsibility take precedence.
 
 These are diagnostic signals, not hard limits.
 
@@ -241,6 +257,8 @@ When results become important:
 - make consequential calculations reproducible.
 
 If an expensive database extract or intermediate result materially improves rerun time when cached, use the project's established cache location and format. Otherwise choose the simplest appropriate local format. Do not create caching infrastructure for cheap transformations.
+
+Treat saved intermediate files as explicit analysis artifacts with documented paths and purposes, not as hidden notebook cache state.
 
 Prefer a clean top-to-bottom path for the active analysis.
 

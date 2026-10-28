@@ -75,7 +75,7 @@ A common pattern is:
 
 Do not force genuinely branching analysis into an artificial linear narrative.
 
-Keep section and subsection headings in their own Markdown cells when that improves notebook navigation and collapsing.
+Always Keep section and subsection headings in their own Markdown cells.
 
 Write for a competent data scientist who understands standard analytical concepts but does not know this project.
 
@@ -125,7 +125,7 @@ Before moving cells, account for:
 - model state;
 - downstream assumptions.
 
-Prefer explicit dependencies over hidden execution state.
+Ensure variables are defined before use and preserve a valid execution order.
 
 Do not preserve confusing order merely because that is how the notebook evolved.
 
@@ -141,6 +141,7 @@ Remove or consolidate content that provides neither current analytical value nor
 - unused intermediate calculations;
 - stale inspection cells;
 - obsolete plots or redundant outputs;
+- repeated source loads or database queries when shared inputs can be loaded once and reused;
 - explanatory text that merely repeats nearby headings or obvious code.
 
 Preserve exploratory, rejected, or superseded work when it documents useful evidence, explains an important change in direction, or prevents future repetition of an unproductive approach.
@@ -166,6 +167,10 @@ When appropriate:
 - prefer established library functionality over equivalent custom implementations;
 - remove unused functions, obsolete options, and unnecessary abstraction;
 - preserve helpers that genuinely simplify repeated or complex logic.
+
+Review substantive cells for responsibility as well as length. A cell should normally have one coherent analytical purpose and one primary result. Flag cells that exceed roughly 75 physical lines or 50 executable lines, contain three or more analytical phases, combine multiple expensive operations, or mix substantial computation with presentation.
+
+When a cell is flagged, split it by analytical phase—such as data preparation, transformation, model calculation, or result presentation—while preserving execution order and analytical semantics. These thresholds are review triggers, not rigid requirements.
 
 Do not hide notebook complexity by moving large amounts of code into external modules solely to shorten the notebook.
 
@@ -288,6 +293,8 @@ Use the `verify` skill for broader verification procedure or when deciding what 
 Do not launch long-running, expensive, destructive, or externally consequential operations solely for notebook curation without explicit authorization.
 
 At completion, report what was structurally validated, what was executed, what was not executed, and any remaining reproducibility risks.
+
+For notebooks with substantive code cells, verify that oversized or multi-phase cells were either split by responsibility or intentionally retained with a clear justification. Use lightweight AST or Radon metrics as supporting evidence, not as a substitute for reviewing the notebook's sequential readability.
 
 ## 14. Completion Standard
 
