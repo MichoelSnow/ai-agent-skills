@@ -23,6 +23,14 @@ A knowledgeable future reader should be able to open the notebook and quickly de
 - what was superseded or rejected and why,
 - what remains unresolved.
 
+## Scope boundary
+
+Do not use this skill for minor or localized notebook updates.
+
+Use `explore-data` by default for analysis and notebook work. Use this skill only for a substantial notebook refactor involving major reorganization, cleanup, narrative restructuring, or reproducibility repair.
+
+If the user explicitly requests this skill, follow that request.
+
 ## 1. Create a Backup Before Modification
 
 Before making any changes:

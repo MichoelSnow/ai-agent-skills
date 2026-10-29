@@ -69,6 +69,13 @@ For SQL or scripts, use the same principle: produce an interpretable intermediat
 
 Do not generate a large sequence of speculative cells or analyses before seeing whether the early assumptions hold.
 
+### Progress for long-running cells
+
+Any notebook cell expected to run longer than 30 seconds must provide progress feedback.
+
+Use a progress bar, staged status messages, or periodic elapsed-time updates. 
+The feedback should identify the current stage and, when practical, report completion or elapsed time for meaningful substeps.
+
 ## 5. Maintain Analytical Continuity
 
 Exploratory notebooks should remain understandable during the work, not only after cleanup.
