@@ -15,6 +15,14 @@ Preserve the analysis, not the notebook's accidental editing history.
 
 A future reader should be able to understand the notebook's purpose, data, current analytical path, important findings, useful experimental history, unresolved questions, and intended execution order without reconstructing the notebook from scratch.
 
+## Scope boundary
+
+Do not use this skill for minor or localized notebook updates.
+
+Use `explore-data` by default for analysis and notebook work. Use this skill only for a substantial notebook refactor involving major reorganization, cleanup, narrative restructuring, or reproducibility repair.
+
+If the user explicitly requests this skill, follow that request.
+
 ## 1. Create a Backup Before Modification
 
 Before making changes:
