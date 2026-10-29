@@ -106,7 +106,6 @@ Any notebook cell expected to run longer than 30 seconds must provide progress f
 Use a progress bar, staged status messages, or periodic elapsed-time updates. 
 The feedback should identify the current stage and, when practical, report completion or elapsed time for meaningful substeps.
 
-## 5. Maintain Analytical Continuity
 The objective is the simplest readable implementation, not the fewest possible characters.
 
 ## 5. Maintain the Active Analytical Thread
