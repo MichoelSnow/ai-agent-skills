@@ -185,7 +185,7 @@ Do not describe unverified work as complete if the missing evidence is necessary
 
 ## 11. Respect Repository Requirements
 
-Project-specific verification rules take precedence when they apply.
+When applicable, project-specific verification rules define additional checks. Apply them subject to the authority order in `AGENTS.md`; current user instruction and authorization/safety boundaries remain above project requirements and this skill.
 
 Use required:
 
@@ -196,7 +196,7 @@ Use required:
 - CI expectations,
 - data validation rules.
 
-Repository requirements can mandate broader verification than this skill would otherwise choose.
+Applicable repository requirements can mandate broader verification than this skill would otherwise choose, but they do not authorize implementation or other mutation.
 
 Do not invent broader requirements that the project does not have.
 

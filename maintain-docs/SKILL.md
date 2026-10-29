@@ -62,7 +62,7 @@ Do not copy the same rule, explanation, command, schema, or decision into multip
 
 If duplication is necessary, keep one source authoritative and make the relationship explicit.
 
-For repository-wide audits or reorganizations, record the result as a source-of-truth matrix before making broad changes. At minimum, include the topic, its authoritative document, and any documents that should link to it rather than duplicate it.
+For genuinely repository-wide audits or reorganizations, a source-of-truth matrix can record the result before broad changes. If used, include the topic, its authoritative document, and any documents that should link to it rather than duplicate it. Ordinary documentation edits do not require a matrix.
 
 Example:
 

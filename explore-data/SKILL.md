@@ -7,11 +7,11 @@ description: Explore data and run iterative analytical or ML experiments. Use wh
 
 ## Goal
 
-Learn from data efficiently without prematurely turning exploratory work into a production pipeline or rigid research process.
+Learn from data efficiently without prematurely turning exploratory work into a production pipeline, polished notebook, or rigid research process.
 
 Work incrementally: understand enough context to choose a useful next step, run that step, inspect the result, and let the evidence determine what comes next.
 
-Keep exploratory work understandable enough that a future reader can recover the analytical thread without reconstructing the notebook from scratch.
+Keep active analytical work understandable as it evolves, but do not perform a full editorial notebook refactor unless explicitly requested. Use `curate-notebook` when an existing notebook needs deliberate restructuring or cleanup.
 
 ## 1. Establish the Analytical Objective
 
@@ -29,13 +29,13 @@ Establish enough structure to reason correctly about the data.
 
 When relevant, determine:
 
-- the grain: what one row represents,
-- identifiers and likely keys,
-- dimensions or categorical variables,
-- metrics or quantitative variables,
-- temporal fields,
-- target/outcome variables,
-- important joins or relationships,
+- the grain: what one row represents;
+- identifiers and likely keys;
+- dimensions or categorical variables;
+- metrics or quantitative variables;
+- temporal fields;
+- target or outcome variables;
+- important joins or relationships;
 - dataset size and relevant time coverage.
 
 Check data quality where it could affect the current analysis, including missingness, duplicates, suspicious values, inconsistent types, unexpected ranges, or leakage.
@@ -48,11 +48,25 @@ Do not profile every column exhaustively when only a narrow subset matters to th
 
 Use the smallest amount of data and computation that can answer the immediate question reliably.
 
-Prefer targeted columns, relevant cohorts/time windows, samples for early exploration of very large datasets, focused summaries over large raw outputs, and small experiments before expensive searches.
+Prefer:
+
+- targeted columns;
+- relevant cohorts or time windows;
+- samples for early exploration of very large datasets;
+- focused summaries over large raw outputs;
+- small experiments before expensive searches or model training.
 
 Escalate to full-data computation only when the result requires it.
 
 Do not run broad queries, exhaustive profiling, large parameter searches, or expensive model training merely because they are available.
+
+For potentially expensive operations:
+
+- begin with a small representative check that verifies correctness and feasibility;
+- estimate runtime or memory when that materially affects the approach;
+- prefer vectorized, batched, or database-native operations over repeated per-row or per-user processing;
+- provide progress reporting for meaningfully long-running operations;
+- reconsider the approach when runtime or implementation complexity becomes disproportionate to the analytical question.
 
 ## 4. Work in Small Analytical Steps
 
@@ -60,14 +74,30 @@ Prefer one coherent analytical step at a time.
 
 For notebooks:
 
-- keep cells focused on one purpose,
-- keep outputs bounded and readable,
-- inspect the output before deciding the next analytical step,
-- preserve a sensible top-to-bottom execution path where practical.
+- keep each substantive cell focused on one coherent analytical purpose and one primary intermediate result or output;
+- separate setup and helper definitions, data loading, transformations, model calculations, and presentation when they are distinct analytical phases;
+- keep outputs bounded and readable;
+- inspect the output before deciding the next analytical step;
+- default to a single top-to-bottom execution path for the active notebook;
+- keep section and subsection headings in their own Markdown cells so notebook collapsing remains useful.
+- If a later section needs additional data, update the earlier loading cell rather than adding a later reload. Keep expensive source extraction, transformation, modeling, and presentation in separate cells.
+
+A cell whose purpose requires multiple major “and” clauses should normally be split before continuing. Prefer splitting by analytical phase rather than by arbitrary line count.
 
 For SQL or scripts, use the same principle: produce an interpretable intermediate result before layering on additional transformations.
 
-Do not generate a large sequence of speculative cells or analyses before seeing whether the early assumptions hold.
+Do not generate a large sequence of speculative cells or analyses before seeing whether early assumptions hold.
+
+Do not pre-create notebook sections, placeholder cells, utilities, or infrastructure for analyses that are merely possible future directions. Add them only when they become part of the current analytical work.
+
+Optimize for the simplest readable implementation that answers the analytical question correctly.
+
+- Prefer established libraries before writing substantial custom utilities or algorithms.
+- Prefer less code when two approaches are equally correct and understandable.
+- Keep straightforward transformations, model calls, and calculations visible.
+- Extract helpers only when they eliminate meaningful duplication or clarify genuinely complex logic.
+- Avoid speculative abstractions, configuration systems, custom classes, or generalized infrastructure.
+- Do not compress code into clever expressions merely to reduce line count.
 
 ### Progress for long-running cells
 
@@ -77,58 +107,77 @@ Use a progress bar, staged status messages, or periodic elapsed-time updates.
 The feedback should identify the current stage and, when practical, report completion or elapsed time for meaningful substeps.
 
 ## 5. Maintain Analytical Continuity
+The objective is the simplest readable implementation, not the fewest possible characters.
 
-Exploratory notebooks should remain understandable during the work, not only after cleanup.
+## 5. Maintain the Active Analytical Thread
 
-Use markdown cells or equivalent lightweight notes to capture the analytical thread around important steps:
+Exploratory work should remain understandable while it is happening.
 
-- current question or objective,
-- why the next analysis is being run,
-- key result,
-- interpretation,
-- next decision or question.
+Use lightweight Markdown or equivalent notes around important steps to capture:
+
+- the current question;
+- why the next analysis is being run;
+- the key result;
+- the interpretation;
+- the next decision or question.
 
 Prefer the compact pattern:
 
 `question -> experiment -> result -> conclusion/next step`
 
-Do not narrate every trivial cell. Document only what a future reader would need to understand why the analysis moved in a particular direction.
+Do not narrate trivial cells.
 
-When an earlier cell changes materially:
+When an earlier result changes materially:
 
-- reconcile downstream cells,
-- update conclusions that depended on the old result,
-- remove or clearly mark obsolete paths,
-- avoid leaving contradictory versions of the same analysis without explanation.
+- reconcile downstream analyses that depend on it;
+- update conclusions based on the old result;
+- clearly mark materially superseded work;
+- remove obvious temporary clutter that no longer contributes to the active analysis.
 
-Clearly distinguish current analysis from scratch exploration.
+Do not perform a full editorial cleanup, aggressive historical pruning, or notebook-wide restructuring during ordinary exploration unless the user explicitly asks for curation.
 
-When an experiment is superseded, either remove it or label it as superseded. Do not leave multiple unexplained alternatives that make the canonical path ambiguous.
+If notebook complexity is becoming disproportionate to the analytical question, stop adding code and simplify the active path before continuing.
 
-## 6. Keep the Notebook Recoverable
+## 6. Monitor Analytical Complexity
 
-A notebook should make it possible for a future reader to answer:
+As exploratory work grows, periodically reassess whether the notebook's complexity is still proportional to the analytical question.
 
-- What problem was this notebook trying to solve?
-- What data does it use?
-- Which analytical path is the current/canonical one?
-- What were the important findings?
-- Which experiments were rejected or superseded?
-- What conclusions were reached?
-- What remains unresolved?
-- Which cells should be run, and in what order?
+Use simple structural indicators as warning signals, including:
 
-When practical, maintain:
+- total code lines,
+- number of code cells,
+- number of helper functions or classes,
+- unusually large individual cells,
+- repeated abstractions or utilities,
+- growing amounts of configuration or control flow.
 
-- a short opening markdown section with purpose and scope,
-- clear section headings,
-- a coherent execution path,
-- concise conclusion notes after major analysis blocks,
-- a short final summary of findings and unresolved questions.
+Use these practical thresholds as warning signals, not hard limits:
 
-Do not create a separate documentation artifact merely to explain a single notebook unless the analysis spans multiple notebooks or the user asks for one.
+- more than 75 physical lines or 50 executable lines;
+- three or more distinct analytical phases;
+- more than one distinct expensive operation, such as a database query, large join, model fit, or file export;
+- more than two major intermediate DataFrames;
+- substantial calculation and presentation logic in the same cell.
 
-For multi-notebook or multi-session analytical work, a separate project-level analysis log may be appropriate.
+If a cell triggers at least two of these conditions, review it for splitting before adding more code. Split by analytical responsibility when the cell combines data preparation, model calculation, prediction generation, or presentation.
+
+A lightweight notebook complexity report may use `nbformat` and Python AST inspection to report per-cell line counts, top-level statements, AST nodes, queries, displays, file operations, and major assignments. Use Radon for Halstead and cyclomatic metrics when useful. Treat all metrics as warning signals; sequential readability and analytical responsibility take precedence.
+
+These are diagnostic signals, not hard limits.
+
+When complexity grows materially, do not respond by automatically refactoring the same amount of machinery into cleaner abstractions. First determine whether the added code, experiments, helpers, or infrastructure are still necessary to answer the current question.
+
+Prefer reducing unnecessary analytical surface area before improving its architecture.
+
+If implementing a method requires a substantial amount of custom infrastructure, control flow, state management, checkpointing, or reusable machinery, stop and reassess whether that implementation is necessary for the analytical question and whether an established implementation can answer it more simply. Do not allow implementation effort to become the primary work of an exploratory notebook.
+
+Use established code-quality tools such as Ruff or Radon when they help identify specific sources of complexity. Do not introduce custom complexity metrics or additional tooling solely to measure the notebook.
+
+Do not reduce measured complexity by moving large amounts of code into external modules solely to shorten the notebook, creating generalized frameworks around exploratory work, or compressing readable code into dense expressions.
+
+If the notebook is becoming difficult for a competent data scientist to understand by reading it sequentially, treat that as a stronger warning than any individual metric.
+
+Before adding another substantial analytical section, model family, utility layer, or diagnostic branch to an already complex notebook, reassess whether it is necessary and whether existing work can first be removed, consolidated, or summarized.
 
 ## 7. Choose Freeform or Hypothesis-Driven Exploration
 
@@ -148,23 +197,23 @@ Use when evaluating a specific claim, method, feature, model, or analytical choi
 
 Make explicit, when material:
 
-- the hypothesis or question,
-- the comparison or baseline,
-- the metric or evidence that matters,
-- important controls or constraints,
+- the hypothesis or question;
+- the comparison or baseline;
+- the metric or evidence that matters;
+- important controls or constraints;
 - what result would change the conclusion.
 
 Do not retrofit hypotheses after seeing results as though they were specified beforehand.
 
-Move from freeform to hypothesis-driven work when the exploration produces a concrete claim worth testing.
+Move from freeform to hypothesis-driven work when exploration produces a concrete claim worth testing.
 
 ## 8. Follow Evidence, Not a Prescribed Pipeline
 
 After each meaningful result:
 
-1. inspect what actually happened,
-2. check whether the result is plausible,
-3. update the working interpretation,
+1. inspect what actually happened;
+2. check whether the result is plausible;
+3. update the working interpretation;
 4. choose the next highest-value step.
 
 Do not automatically march through `load -> clean -> EDA -> feature engineering -> model -> tune -> report`.
@@ -177,38 +226,53 @@ If a result is surprising or consequential, perform a focused reasonableness che
 
 When the task reaches modeling:
 
-- establish a meaningful baseline before adding complexity,
-- use evaluation metrics that match the actual objective,
-- guard against target leakage and inappropriate train/test contamination,
-- preserve comparable evaluation conditions across candidate models,
-- change a small number of important factors at a time when practical,
+- establish a meaningful baseline before adding complexity;
+- use evaluation metrics that match the actual objective;
+- guard against target leakage and inappropriate train/test contamination;
+- preserve comparable evaluation conditions across candidate models;
+- change a small number of important factors at a time when practical;
 - inspect relevant segments or failure cases when aggregate metrics may hide important behavior.
+
+Before introducing another model family, substantial diagnostic experiment, or new layer of modeling infrastructure, reassess whether it is necessary to answer the original analytical question.
+
+Consider:
+
+- What specific uncertainty will this experiment resolve?
+- What result would change the current decision?
+- Is there a simpler experiment that could answer the same question?
+- Is the likely value of the information worth the additional complexity?
+
+Do not expand a straightforward analysis into an open-ended model-development project through successive additions.
+
+When proposed work materially changes the scope or complexity of the analysis, explain that change and obtain user approval before proceeding.
 
 Do not assume a more complex model is preferable because it performs slightly better.
 
 Do not launch broad hyperparameter searches or production-grade experiment infrastructure unless the stage and objective justify them.
 
-Record enough information to understand what changed between meaningful experiments.
-
-For important model comparisons, record the candidate, key configuration differences, evaluation setup, result, and interpretation so the notebook does not become a sequence of unexplained model runs.
+For important model comparisons, record enough context to understand what changed: candidate, meaningful configuration difference, evaluation setup, result, and interpretation.
 
 ## 10. Preserve Reproducibility Without Overengineering
 
 Exploratory work should be rerunnable enough to support its conclusions, but it does not need production architecture.
 
-When a database extract or intermediate computation is expensive enough that caching materially improves rerun time, save the result in the project's established cache location and load it by default on later runs. Use an explicit refresh control to rebuild the cache. Do not cache every dataframe: quick transformations should remain in memory, and caches should be reserved for database extracts, expensive computations, or substantial final analysis outputs. Follow the project's established serialization format first; when no project convention exists, pickle is a reasonable default for local pandas notebook data, but use a more portable or durable format when interoperability, archival stability, or security requires it. Never load pickle files from untrusted sources.
-
 When results become important:
 
-- make key assumptions explicit,
-- preserve important parameters and random seeds,
-- keep transformations traceable,
-- record the evaluation setup,
+- make key assumptions explicit;
+- preserve important parameters and random seeds;
+- keep transformations traceable;
+- record the evaluation setup;
 - make consequential calculations reproducible.
 
-Prefer a clean top-to-bottom path for the canonical analysis.
+If an expensive database extract or intermediate result materially improves rerun time when cached, use the project's established cache location and format. Otherwise choose the simplest appropriate local format. Do not create caching infrastructure for cheap transformations.
 
-Do not introduce orchestration systems, reusable frameworks, extensive abstractions, or production pipelines merely to tidy exploratory work.
+Treat saved intermediate files as explicit analysis artifacts with documented paths and purposes, not as hidden notebook cache state.
+
+Prefer a clean top-to-bottom path for the active analysis.
+
+Reproducibility means preserving the data sources, transformations, parameters, random seeds, and execution sequence necessary to reproduce the analytical conclusions.
+
+It does not require generalized experiment runners, large configuration systems, checkpointing frameworks, custom data-loading infrastructure, or other production-style abstractions.
 
 If exploratory code later needs to become production code, treat productionization as a separate task.
 
@@ -216,8 +280,8 @@ If exploratory code later needs to become production code, treat productionizati
 
 Distinguish:
 
-- **Observation:** what the data or experiment shows,
-- **Interpretation:** what may explain the observation,
+- **Observation:** what the data or experiment shows;
+- **Interpretation:** what may explain the observation;
 - **Decision:** what should be done because of it.
 
 Do not present exploratory correlations as causal findings.
@@ -230,13 +294,15 @@ Do not claim an experiment supports a conclusion beyond what its design and evid
 
 Stop when the user's current analytical question has been answered sufficiently or when the next useful step requires a new decision from the user.
 
-Before leaving a substantial notebook session, make the notebook recoverable:
+Before leaving a substantial analytical session, make the active work recoverable:
 
-- update the current objective if it changed,
-- mark obsolete or superseded paths,
-- record the key conclusions reached,
-- identify unresolved questions,
+- record the current objective if it changed;
+- mark materially superseded paths;
+- record key conclusions;
+- identify unresolved questions;
 - make the next logical step clear.
+
+Do not turn this into a full notebook-curation pass unless requested.
 
 Summarize, when appropriate, what was learned, important caveats, unresolved questions, and the most useful next analytical step.
 
@@ -252,7 +318,7 @@ When the boundary between exploration and implementation is unclear, stop before
 
 ## Key Principle
 
-Use the smallest useful experiment to learn the next important thing. Keep the analytical thread visible as you go so the notebook remains understandable after the exploration is over.
+Use the smallest useful experiment to learn the next important thing. Keep the active analytical thread visible without turning exploration into notebook curation or production engineering.
 
 ## Attribution
 
@@ -264,4 +330,4 @@ This skill was adapted from concepts and workflow patterns in:
 
 The OpenAI `jupyter-notebook` skill and Anthropic `knowledge-work-plugins` repository are distributed under the Apache License 2.0. `eins78/agent-skills` is distributed under the MIT License. See the upstream repositories for the complete license texts and notices.
 
-This version has been substantially modified to combine lightweight exploratory data analysis and ML experimentation, scale process to the analytical question, support notebooks/SQL/scripts without requiring them, maintain lightweight lab-note-style analytical continuity, and avoid automatically escalating exploratory work into modeling or production engineering.
+This version has been substantially modified to combine lightweight exploratory data analysis and ML experimentation, scale process to the analytical question, support notebooks/SQL/scripts without requiring them, maintain analytical continuity during active work, and avoid automatically escalating exploratory work into notebook curation, modeling infrastructure, or production engineering.

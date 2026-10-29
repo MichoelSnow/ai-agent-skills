@@ -7,9 +7,44 @@ description: Perform a read-only, evidence-based review of code or a branch. Use
 
 ## Goal
 
-Assess whether a change is correct, safe, and appropriate for the project without modifying code.
+Assess a change without modifying it, using the review path that matches the user's request. Keep compliance findings, engineering findings, and exploratory feedback distinct.
 
-Prioritize real defects and meaningful risks over style preferences, speculative concerns, or enterprise assumptions that do not apply to the project.
+For engineering reviews, prioritize real defects and meaningful risks over style preferences, speculative concerns, or enterprise assumptions that do not apply to the project.
+
+## Review Paths
+
+Choose one primary path based on the user's request. If the user requests more than one, keep the results in separate sections.
+
+### Requirements / Framework Compliance Audit
+
+Use this path when the user wants to know whether a change complies with applicable instructions or binding requirements.
+
+1. Establish the requested scope, normally a relevant git diff, commit range, pull request, or explicitly named files.
+2. Identify applicable `AGENTS.md` instructions, including any more-specific instructions governing the changed files.
+3. Identify applicable requirement documents under `docs/requirements/` and check their stated applicability before treating them as binding.
+4. Consult project context when its facts or accepted decisions materially affect interpretation.
+5. Treat `docs/reference/` as advisory unless an applicable binding requirement explicitly adopts it.
+6. Compare the changed material with the applicable contract and requirements.
+
+Report concrete, evidence-backed violations with their location, the applicable requirement, and the observed conflict. Do not report style preferences or hypothetical violations. Do not restore application/pipeline mode checks, impose a fixed pass/fail format, or require a merge gate unless the user explicitly requests that format or an applicable project requirement defines it.
+
+This path remains read-only. A compliance violation does not authorize a fix.
+
+### Engineering Review
+
+Use this path when the user wants an engineering or code-quality assessment. The workflow in sections 5–11 below is the engineering review procedure. It covers correctness, security, data integrity, reliability, performance/cost, testing, maintainability, and compatibility where applicable.
+
+### Exploratory Review
+
+Use this path when the user wants broader architectural or maintainability feedback beyond concrete defects or requirement violations.
+
+1. Establish the requested changed-file scope, normally `git diff main...HEAD` for a branch review.
+2. Inspect full repository context where needed to understand architectural and maintainability impact.
+3. Consult project context, applicable scoped requirements, and relevant reference material.
+4. Separate observations from questions and optional suggestions.
+5. Keep feedback high-signal and non-blocking. Do not present speculative or preference-based concerns as defects or merge blockers.
+
+Thoughtful author questions are appropriate where rationale or tradeoffs are not evident. Do not require a fixed number of questions or a fixed output structure. A useful structure may include a high-level assessment, soft risks, author questions, and optional improvements, but the user need not receive every category.
 
 ## 1. Preserve the Read-Only Boundary
 
@@ -278,7 +313,7 @@ Do not treat "more tests" as inherently better.
 
 ## 12. Use Project-Specific Review Rules When Present
 
-If the repository contains review instructions, framework audits, project rules, or contracts that apply to the requested review, use them.
+If the repository contains review instructions, framework audits, project rules, or contracts that apply to the requested review, use them for the relevant review path.
 
 Examples include:
 
@@ -289,9 +324,9 @@ Examples include:
 - architecture contracts,
 - security baselines.
 
-Do not silently substitute generic review criteria for explicit repository requirements.
+Do not silently substitute generic review criteria for explicit repository requirements. For the compliance path, verify applicability before treating a requirement as binding. For the exploratory path, requirements and references inform interpretation but do not turn optional feedback into defects.
 
-If a project-specific review workflow conflicts with this skill, follow the project-specific requirement for that repository.
+When `AGENTS.md` defines an authority order, follow it. In particular, the current user instruction and authorization/safety boundaries remain above project-specific review workflows, this skill, and reference material. Applicable project requirements may constrain the review, but they do not authorize fixes or other mutation.
 
 ## 13. Output
 
